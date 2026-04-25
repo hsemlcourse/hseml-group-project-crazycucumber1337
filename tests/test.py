@@ -116,7 +116,7 @@ class TestModeling:
         train, val, _ = split_data(df_enc)
         X_train, y_train = get_X_y(train)
         X_val, y_val = get_X_y(val)
-        model = LogisticRegression(max_iter=500, random_state=RANDOM_STATE)
+        model = LogisticRegression(max_iter=2000, random_state=RANDOM_STATE)
         model.fit(X_train, y_train)
         metrics = evaluate_model(model, X_val, y_val, "val")
         assert "weighted_f1" in metrics
