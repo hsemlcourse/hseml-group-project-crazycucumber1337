@@ -18,17 +18,14 @@
 
 ## Описание задачи
 
-<!-- Кратко опишите задачу: что предсказываем, какой датасет, метрика качества -->
-
 **Задача:** Классификация
 
 **Датасет:** Student Mental Health and Burnout Dataset (https://www.kaggle.com/datasets/sehaj1104/student-mental-health-and-burnout-dataset/data)
 
-**Целевая метрика:** F1
+**Целевая метрика:** Weighted F1-score
 
 
 ## Структура репозитория
-Опишите структуру проекта, сохранив при этом верхнеуровневые папки. Можно добавить новые при необходимости.
 ```
 .
 ├── data
@@ -54,16 +51,15 @@
 
 ## Запуск
 
-Этот блок замените способом запуска вашего сервиса.
 ```bash
 # 1. Клонировать репозиторий
-git clone <url>
-cd <repo-name>
+git clone hseml-group-project-crazycucumber1337
+cd hseml-group-project-crazycucumber1337
 
 # 2. Создать виртуальное окружение
 python -m venv .venv
-source .venv/bin/activate   # Linux/macOS
-# .venv\Scripts\activate    # Windows
+# source .venv/bin/activate   # Linux/macOS
+.venv\Scripts\activate    # Windows
 
 # 3. Установить зависимости
 pip install -r requirements.txt
@@ -75,11 +71,12 @@ pip install -r requirements.txt
 
 
 ## Результаты
-Здесь коротко выпишите результаты.
-| Модель | [Метрика 1] | [Метрика 2] | Примечание |
-|--------|-------------|-------------|------------|
-| Baseline | — | — | |
-| Лучшая модель | — | — | |
+| Model | Hypothesis | Split | Accuracy | Weighted F1 | Macro F1 | ROC AUC OvR | CV F1 |
+|-------|------------|-------|----------|-------------|----------|-------------|-------|
+| Decision Tree | Нелинейные правила | val | 0.3311 | 0.3311 | 0.3311 | 0.4983 | 0.3331 ± 0.0015 |
+| KNN (k=11) | Похожие студенты | val | 0.3337 | 0.3301 | 0.3301 | 0.4983 | 0.3321 ± 0.0033 |
+| Logistic Regression | Линейное разделение | val | 0.3322 | 0.3287 | 0.3286 | 0.4972 | 0.3295 ± 0.0022 |
+| Dummy (most_frequent) | Нижняя граница | val | 0.3351 | 0.1682 | 0.1673 | 0.5000 | NaN |
 
 
 ## Отчёт
