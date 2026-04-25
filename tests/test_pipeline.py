@@ -6,6 +6,9 @@ import numpy as np
 import pandas as pd
 import pytest
 from sklearn.linear_model import LogisticRegression
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from src.preprocessing import (
     clean_data,
@@ -19,28 +22,33 @@ RANDOM_STATE = 42
 
 
 def make_dummy_df(n: int = 500) -> pd.DataFrame:
-    """Create a minimal dummy dataset with expected column structure."""
     rng = np.random.default_rng(RANDOM_STATE)
-    return pd.DataFrame(
-        {
-            "age": rng.integers(18, 30, n),
-            "gender": rng.choice(["Male", "Female"], n),
-            "course": rng.choice(["CS", "Math", "Physics"], n),
-            "grade": rng.choice(["1", "2", "3", "4"], n),
-            "cgpa": rng.uniform(2.0, 4.0, n).round(2),
-            "attendance": rng.uniform(50, 100, n).round(1),
-            "study_time": rng.uniform(1, 10, n).round(1),
-            "anxiety_level": rng.integers(0, 10, n),
-            "depression_level": rng.integers(0, 10, n),
-            "stress_level": rng.integers(0, 10, n),
-            "sleep_duration": rng.uniform(4, 10, n).round(1),
-            "physical_activity": rng.uniform(0, 5, n).round(1),
-            "screen_time": rng.uniform(1, 12, n).round(1),
-            "financial_stress": rng.integers(0, 10, n),
-            "social_support": rng.integers(0, 10, n),
-            "burnout_level": rng.choice(["Low", "Medium", "High"], n),
-        }
-    )
+    return pd.DataFrame({
+        # --- числовые признаки (NUMERIC_COLS) ---
+        "age":                        rng.integers(18, 30, n),
+        "daily_study_hours":          rng.uniform(1, 10, n).round(1),
+        "daily_sleep_hours":          rng.uniform(4, 10, n).round(1),
+        "screen_time_hours":          rng.uniform(1, 12, n).round(1),
+        "anxiety_score":              rng.integers(0, 10, n),
+        "depression_score":           rng.integers(0, 10, n),
+        "academic_pressure_score":    rng.integers(0, 10, n),
+        "financial_stress_score":     rng.integers(0, 10, n),
+        "social_support_score":       rng.integers(0, 10, n),
+        "physical_activity_hours":    rng.uniform(0, 5, n).round(1),
+        "attendance_percentage":      rng.uniform(50, 100, n).round(1),
+        "cgpa":                       rng.uniform(2.0, 4.0, n).round(2),
+
+        # --- категориальные признаки (CATEGORICAL_COLS) ---
+        "gender":                     rng.choice(["Male", "Female"], n),
+        "year":                       rng.choice(["1st", "2nd", "3rd", "4th"], n),
+        "course":                     rng.choice(["CS", "Math", "Physics"], n),
+        "stress_level":               rng.choice(["Low", "Medium", "High"], n),
+        "sleep_quality":              rng.choice(["Good", "Average", "Poor"], n),
+        "internet_quality":           rng.choice(["Good", "Poor"], n),
+
+        # --- целевая переменная ---
+        "burnout_level":              rng.choice(["Low", "Medium", "High"], n),
+    })
 
 
 class TestCleaning:
