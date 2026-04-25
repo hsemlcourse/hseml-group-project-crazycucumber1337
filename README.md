@@ -1,9 +1,9 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/kOqwghv0)
-# ML Project — [Название проекта]
+# ML Project — Предсказание уровня эмоционального выгорания студентов
 
-**Студент:** [ФИО / Student ID]
+**Студент:** Дыбнова Ирина Сергеевна
 
-**Группа:** [Группа]
+**Группа:** БИВ234
 
 
 ## Оглавление
@@ -20,11 +20,11 @@
 
 <!-- Кратко опишите задачу: что предсказываем, какой датасет, метрика качества -->
 
-**Задача:** [Классификация / Регрессия / Кластеризация / ...]
+**Задача:** Классификация
 
-**Датасет:** [Название и источник датасета]
+**Датасет:** Student Mental Health and Burnout Dataset (https://www.kaggle.com/datasets/sehaj1104/student-mental-health-and-burnout-dataset/data)
 
-**Целевая метрика:** [Accuracy / F1 / RMSE / ...]
+**Целевая метрика:** F1
 
 
 ## Структура репозитория

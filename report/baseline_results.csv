@@ -1,0 +1,5 @@
+model_name,hypothesis,split,accuracy,weighted_f1,macro_f1,roc_auc_ovr,cv_f1
+Decision Tree,Нелинейные правила,val,0.3311,0.3311,0.3311,0.4983,0.3331 ± 0.0015
+KNN (k=11),Похожие студенты,val,0.3337,0.3301,0.3301,0.4983,0.3321 ± 0.0033
+Logistic Regression,Линейное разделение,val,0.3322,0.3287,0.3286,0.4972,0.3295 ± 0.0022
+Dummy (most_frequent),Нижняя граница,val,0.3351,0.1682,0.1673,0.5,
