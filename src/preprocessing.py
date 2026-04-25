@@ -150,15 +150,27 @@ def feature_engineering(df: pd.DataFrame, thresholds: dict = None) -> pd.DataFra
 
 
 def encode_features(df: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+    """
+    Encode categorical features using one-hot encoding and the target using
+    LabelEncoder.
+
+    Categorical columns are expanded into binary dummy columns (e.g. gender →
+    gender_Female, gender_Male). This avoids imposing a spurious ordinal
+    ordering that LabelEncoder would introduce for nominal features.
+
+    Returns the encoded DataFrame and a dict containing only the target
+    LabelEncoder (needed to recover class names for reporting).
+    """
     df = df.copy()
     encoders = {}
 
+    # One-hot encode all nominal categorical columns.
+    # dtype=int produces 0/1 integer columns instead of booleans.
     cat_present = [c for c in CATEGORICAL_COLS if c in df.columns]
-    for col in cat_present:
-        le = LabelEncoder()
-        df[col] = le.fit_transform(df[col].astype(str))
-        encoders[col] = le
+    if cat_present:
+        df = pd.get_dummies(df, columns=cat_present, dtype=int)
 
+    # Label-encode the target (ordinal encoding is correct for the target).
     le_target = LabelEncoder()
     df[TARGET_COL] = le_target.fit_transform(df[TARGET_COL].astype(str))
     encoders[TARGET_COL] = le_target
@@ -192,13 +204,29 @@ def split_data(df: pd.DataFrame, val_size=0.15, test_size=0.15):
 
 
 def scale_features(train, val, test, numeric_cols=None):
+    """
+    Fit StandardScaler on train and transform all three splits.
+
+    Binary columns (containing only 0 and 1) are automatically excluded from
+    scaling — standardising a flag column would distort its interpretation
+    without adding any benefit for distance-based or gradient-based learners.
+    """
     if numeric_cols is None:
         numeric_cols = [c for c in NUMERIC_COLS if c in train.columns]
+
+    # Exclude binary (0/1) indicator columns from scaling.
+    binary_cols = {
+        c for c in numeric_cols if set(train[c].dropna().unique()).issubset({0, 1})
+    }
+    if binary_cols:
+        print(f"Skipping scaling for binary columns: {sorted(binary_cols)}")
+    cols_to_scale = [c for c in numeric_cols if c not in binary_cols]
+
     scaler = StandardScaler()
     train = train.copy()
     val = val.copy()
     test = test.copy()
-    train[numeric_cols] = scaler.fit_transform(train[numeric_cols])
-    val[numeric_cols] = scaler.transform(val[numeric_cols])
-    test[numeric_cols] = scaler.transform(test[numeric_cols])
+    train[cols_to_scale] = scaler.fit_transform(train[cols_to_scale])
+    val[cols_to_scale] = scaler.transform(val[cols_to_scale])
+    test[cols_to_scale] = scaler.transform(test[cols_to_scale])
     return train, val, test, scaler
