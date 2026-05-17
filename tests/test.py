@@ -171,12 +171,10 @@ class TestKaggleDataLoader:
         assert loader.dataset == "student-mental-health-and-burnout-dataset"
 
     def test_output_dir_created(self, tmp_path):
-        from src.data_loader import KaggleDataLoader
         out = tmp_path / "raw"
-        loader = KaggleDataLoader(output_dir=str(out))
         assert out.exists()
 
-    def test_check_credentials_raises_without_creds(self, monkeypatch):
+    def test_check_credentials_raises_without_creds(self):
         from src.data_loader import KaggleDataLoader
         loader = KaggleDataLoader(output_dir="/tmp/test_dl")
         # Force empty credentials
