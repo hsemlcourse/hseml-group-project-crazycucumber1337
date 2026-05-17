@@ -52,8 +52,8 @@ class KaggleDataLoader:
     # ── Основные методы ─────────────────────────────────────────────────────
     def download(self) -> Path:
         """
-        Сначала пробуем kagglehub.
-        Если не получилось — fallback через REST API.
+        First try kagglehub.
+        If it fails — fallback to the REST API.
         """
         try:
             return self._download_via_kagglehub()
@@ -67,7 +67,7 @@ class KaggleDataLoader:
 
     def _download_via_kagglehub(self) -> Path:
         """
-        Основной способ загрузки через kagglehub.
+        Primary download method via kagglehub.
         """
         target = self.output_dir / DATASET_FILE
 
@@ -91,7 +91,7 @@ class KaggleDataLoader:
 
     def _download_via_rest(self) -> Path:
         """
-        Резервная загрузка через REST API Kaggle.
+        Fallback download via Kaggle REST API.
         """
         if not self._rest_available:
             raise RuntimeError("REST API is unavailable: no valid API token.")
@@ -126,8 +126,8 @@ class KaggleDataLoader:
         return target
 
     def fetch_metadata(self) -> dict:
-        """Получить метаданные (REST, если доступен, иначе базовая информация)."""
-        # Пытаемся через REST (альтернативный эндпоинт metadata)
+        """Fetch metadata (via REST if available, otherwise basic information)."""
+        # Attempt via REST (alternative metadata endpoint)
         if self._rest_available:
             try:
                 url = f"{KAGGLE_API_BASE}/datasets/{self.owner}/{self.dataset}/metadata"
@@ -146,7 +146,7 @@ class KaggleDataLoader:
         }
 
     def list_dataset_files(self) -> list[dict]:
-        """Список файлов из локального кэша (работает всегда)."""
+        """List files from the local cache (always works)."""
         if not self._downloaded_dir:
             self._downloaded_dir = self._get_cached_download_dir()
             if not self._downloaded_dir:
@@ -164,6 +164,7 @@ class KaggleDataLoader:
         return files
 
     def print_dataset_info(self):
+        """Print basic dataset information."""
         print("=" * 60)
         print("KAGGLE DATASET INFO")
         print("=" * 60)
@@ -192,6 +193,7 @@ class KaggleDataLoader:
 
     # ── Вспомогательные методы ─────────────────────────────────────────────
     def _get_cached_download_dir(self):
+        """Check kagglehub cache for existing download."""
         cache_base = Path.home() / ".cache" / "kagglehub" / "datasets"
         dataset_dir = cache_base / self.owner / self.dataset / "versions"
         if dataset_dir.exists():
@@ -202,6 +204,7 @@ class KaggleDataLoader:
         return None
 
     def _load_credentials_from_json(self):
+        """Load credentials from kaggle.json."""
         kaggle_json = Path.home() / ".kaggle" / "kaggle.json"
         if kaggle_json.exists():
             with open(kaggle_json) as fh:
@@ -210,7 +213,7 @@ class KaggleDataLoader:
             self._key = creds.get("key")
 
     def _parse_metadata(self, raw: dict) -> dict:
-        """Парсит JSON-ответ от REST API."""
+        """Parses JSON response from REST API."""
         return {
             "title": raw.get("title", ""),
             "subtitle": raw.get("subtitle", ""),
