@@ -133,8 +133,14 @@ class TestCleaningPipeline:
         train_c = apply_cleaning(train_raw, stats)
         val_c = apply_cleaning(val_raw, stats)
         test_c = apply_cleaning(test_raw, stats)
-        for split_name, split_df in [("train", train_c), ("val", val_c), ("test", test_c)]:
-            assert split_df.isnull().sum().sum() == 0, f"{split_name} has NaNs after cleaning"
+        for split_name, split_df in [
+            ("train", train_c),
+            ("val", val_c),
+            ("test", test_c),
+        ]:
+            assert (
+                split_df.isnull().sum().sum() == 0
+            ), f"{split_name} has NaNs after cleaning"
 
     def test_val_stats_not_computed_from_val(self):
         """Val cleaning must use train-fitted stats, not its own stats."""
