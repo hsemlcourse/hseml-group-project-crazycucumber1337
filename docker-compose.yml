@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: burnout_jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      # Mount data and models directories so they persist between runs
+      - ./data:/app/data
+      - ./models:/app/models
+      - ./report:/app/report
+      - ./notebooks:/app/notebooks
+    environment:
+      - PYTHONPATH=/app
+    restart: unless-stopped
+
+  # Optional: run tests inside container
+  tests:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: burnout_tests
+    command: ["pytest", "tests/", "-v", "--tb=short"]
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    environment:
+      - PYTHONPATH=/app
+    profiles:
+      - testing
