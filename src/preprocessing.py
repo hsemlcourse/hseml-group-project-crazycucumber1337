@@ -18,7 +18,6 @@ enforced in the notebooks is:
   7. scale_features()     – StandardScaler fitted on train, applied everywhere
 """
 
-import joblib
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import LabelEncoder, StandardScaler
