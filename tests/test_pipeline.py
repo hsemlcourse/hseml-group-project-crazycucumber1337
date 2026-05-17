@@ -172,15 +172,18 @@ class TestKaggleDataLoader:
 
     def test_output_dir_created(self, tmp_path):
         out = tmp_path / "raw"
+        # Instantiate loader – this should create the directory
+        KaggleDataLoader(output_dir=str(out))
         assert out.exists()
 
     def test_check_credentials_raises_without_creds(self):
         loader = KaggleDataLoader(output_dir="/tmp/test_dl")
-        # Force empty credentials
+        # Force empty credentials and disable REST API
         loader._username = None
         loader._key = None
-        with pytest.raises(EnvironmentError, match="Kaggle credentials"):
-            loader._check_credentials()
+        loader._rest_available = False
+        with pytest.raises(RuntimeError, match="REST API is unavailable"):
+            loader._download_via_rest()
 
     def test_download_skips_if_file_exists(self, tmp_path):
         """If CSV already exists, download() returns immediately without API call."""
