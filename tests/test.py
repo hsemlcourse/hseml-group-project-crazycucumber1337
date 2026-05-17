@@ -8,6 +8,7 @@ import pytest
 from sklearn.linear_model import LogisticRegression
 import sys
 from pathlib import Path
+from src.data_loader import KaggleDataLoader, DATASET_FILE
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
@@ -165,7 +166,6 @@ class TestKaggleDataLoader:
     """Tests for the Kaggle API data loader (unit-level, no real API calls)."""
 
     def test_loader_initialises(self):
-        from src.data_loader import KaggleDataLoader
         loader = KaggleDataLoader(output_dir="/tmp/test_dl")
         assert loader.owner == "sehaj1104"
         assert loader.dataset == "student-mental-health-and-burnout-dataset"
@@ -175,7 +175,6 @@ class TestKaggleDataLoader:
         assert out.exists()
 
     def test_check_credentials_raises_without_creds(self):
-        from src.data_loader import KaggleDataLoader
         loader = KaggleDataLoader(output_dir="/tmp/test_dl")
         # Force empty credentials
         loader._username = None
@@ -185,7 +184,6 @@ class TestKaggleDataLoader:
 
     def test_download_skips_if_file_exists(self, tmp_path):
         """If CSV already exists, download() returns immediately without API call."""
-        from src.data_loader import KaggleDataLoader, DATASET_FILE
         # Pre-create the target file
         existing = tmp_path / DATASET_FILE
         existing.write_text("col1,col2\n1,2\n")
