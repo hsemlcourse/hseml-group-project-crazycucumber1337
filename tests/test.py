@@ -10,8 +10,6 @@ import sys
 from pathlib import Path
 from src.data_loader import KaggleDataLoader, DATASET_FILE
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
 from src.preprocessing import (
     split_raw,
     fit_cleaning_stats,
@@ -21,6 +19,8 @@ from src.preprocessing import (
     split_data,  # legacy alias
 )
 from src.modeling import evaluate_model, get_X_y
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 RANDOM_STATE = 42
 
